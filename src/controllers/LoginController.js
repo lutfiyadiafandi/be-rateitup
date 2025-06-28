@@ -1,7 +1,7 @@
 // import express, validationResult, bcrypt, jwt, prisma
 const express = require("express");
 const { validationResult } = require("express-validator");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const prisma = require("../../prisma/client");
 

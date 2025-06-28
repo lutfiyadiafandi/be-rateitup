@@ -2,7 +2,7 @@
 const express = require("express");
 const prisma = require("../../prisma/client");
 const { validationResult } = require("express-validator");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 // createUser function
 const createUser = async (req, res) => {
