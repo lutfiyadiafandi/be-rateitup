@@ -26,13 +26,15 @@ const createUser = async (req, res) => {
         name: req.body.name,
         username: req.body.username,
         password: hashedPassword,
+        role: "user",
       },
     });
+    const { password, ...userWithoutPassword } = user;
     // return success response
     res.status(201).send({
       success: true,
       message: "User registered successfully",
-      data: user,
+      data: userWithoutPassword,
     });
   } catch (error) {
     // handle errors
@@ -53,9 +55,10 @@ const findUsers = async (req, res) => {
         id: true,
         name: true,
         username: true,
+        role: true,
       },
       orderBy: {
-        id: "desc",
+        id: "asc",
       },
     });
 
@@ -89,6 +92,7 @@ const findUserById = async (req, res) => {
         id: true,
         name: true,
         username: true,
+        role: true,
       },
     });
     // return success response
@@ -119,10 +123,15 @@ const updateUser = async (req, res) => {
       errors: errors.array(),
     });
   }
-  // hash password
-  const hashedPassword = await bcrypt.hash(req.body.password, 10);
   // get user id from params
   const userId = parseInt(req.params.id);
+  // destructure request body
+  const { name, username, password } = req.body;
+  const updatedData = {};
+  if (name !== undefined) updatedData.name = name;
+  if (username !== undefined) updatedData.username = username;
+  if (password !== undefined)
+    updatedData.password = await bcrypt.hash(password, 10);
 
   try {
     // update user
@@ -130,18 +139,14 @@ const updateUser = async (req, res) => {
       where: {
         id: userId,
       },
-      data: {
-        name: req.body.name,
-        username: req.body.username,
-        password: hashedPassword,
-      },
+      data: updatedData,
     });
-
+    const { password, ...userWithoutPassword } = user;
     // return success response
     res.status(200).send({
       success: true,
       message: `User with ID ${userId} updated successfully`,
-      data: user,
+      data: userWithoutPassword,
     });
   } catch (error) {
     // handle errors

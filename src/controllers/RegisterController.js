@@ -26,13 +26,15 @@ const register = async (req, res) => {
         name: req.body.name,
         username: req.body.username,
         password: hashedPassword,
+        role: "user", // default role
       },
     });
+    const { password, ...userWithoutPassword } = user;
     // return success response
     res.status(201).send({
       success: true,
       message: "User registered successfully",
-      data: user,
+      data: userWithoutPassword,
     });
   } catch (error) {
     // handle errors

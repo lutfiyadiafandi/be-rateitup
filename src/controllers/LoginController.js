@@ -29,6 +29,7 @@ const login = async (req, res) => {
         name: true,
         username: true,
         password: true,
+        role: true,
       },
     });
     // check if user exists
