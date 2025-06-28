@@ -1,6 +1,6 @@
 // import express validator, prisma
 const { body } = require("express-validator");
-const prisma = require("../../prisma/client");
+const prisma = require("../../../prisma/client");
 
 // define validation for registration
 const validateRegister = [

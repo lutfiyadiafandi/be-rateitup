@@ -3,7 +3,7 @@ const express = require("express");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const prisma = require("../prisma/client");
+const prisma = require("../../prisma/client");
 
 // login function
 const login = async (req, res) => {
@@ -66,7 +66,7 @@ const login = async (req, res) => {
     });
   } catch (error) {
     // handle errors
-    res.status(500).json({
+    res.status(500).send({
       success: false,
       message: "Internal server error",
       error: error.message,

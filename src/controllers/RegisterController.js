@@ -2,7 +2,7 @@
 const express = require("express");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
-const prisma = require("../prisma/client");
+const prisma = require("../../prisma/client");
 
 // register function
 const register = async (req, res) => {
@@ -29,14 +29,14 @@ const register = async (req, res) => {
       },
     });
     // return success response
-    res.status(201).json({
+    res.status(201).send({
       success: true,
       message: "User registered successfully",
       data: user,
     });
   } catch (error) {
     // handle errors
-    res.status(500).json({
+    res.status(500).send({
       success: false,
       message: "Internal server error",
       error: error.message,
