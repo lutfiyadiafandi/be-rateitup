@@ -1,9 +1,9 @@
 const { validationResult } = require("express-validator");
-const UserService = require("../services/UserService");
+const RestaurantService = require("../services/RestaurantService");
 
-class UserController {
-  //  Create user
-  async createUser(req, res) {
+class RestaurantController {
+  //  Create restaurant
+  async createRestaurant(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({
@@ -13,55 +13,61 @@ class UserController {
       });
     }
 
-    try {
-      const user = await UserService.createUser(req.body);
-      res.status(201).send({
-        success: true,
-        message: "User registered successfully",
-        data: user,
-      });
-    } catch (error) {
-      res.status(500).send({
-        success: false,
-        message: "Internal server error",
-        error: error.message,
-      });
-    }
-  }
-
-  // Find all users
-  async findUsers(req, res) {
-    try {
-      const users = await UserService.findAllUsers();
-      res.status(200).send({
-        success: true,
-        message: "Get all users successfully",
-        data: users,
-      });
-    } catch (error) {
-      res.status(500).send({
-        success: false,
-        message: "Internal server error",
-        error: error.message,
-      });
-    }
-  }
-
-  // Find user by ID
-  async findUserById(req, res) {
     const userId = req.userId;
     try {
-      const user = await UserService.findUserById(userId);
-      if (!user) {
+      const restaurant = await RestaurantService.createRestaurant(
+        req.body,
+        userId
+      );
+      res.status(201).send({
+        success: true,
+        message: "Restaurant created successfully",
+        data: restaurant,
+      });
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      });
+    }
+  }
+
+  // Find all restaurants
+  async findRestaurants(req, res) {
+    try {
+      const restaurants = await RestaurantService.findAllRestaurants();
+      res.status(200).send({
+        success: true,
+        message: "Get all restaurants successfully",
+        data: restaurants,
+      });
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      });
+    }
+  }
+
+  // Find restaurant by ID
+  async findRestaurantById(req, res) {
+    const restaurantId = parseInt(req.params.id);
+    try {
+      const restaurant = await RestaurantService.findRestaurantById(
+        restaurantId
+      );
+      if (!restaurant) {
         return res.status(404).send({
           success: false,
-          message: "User not found",
+          message: "restaurant not found",
         });
       }
       res.status(200).send({
         success: true,
-        message: `Get user by ID: ${userId} successfully`,
-        data: user,
+        message: `Get restaurant by ID: ${restaurantId} successfully`,
+        data: restaurant,
       });
     } catch (error) {
       res.status(500).send({
@@ -72,8 +78,8 @@ class UserController {
     }
   }
 
-  // Update user
-  async updateUser(req, res) {
+  // Update restaurant
+  async updateRestaurant(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).send({
@@ -83,13 +89,18 @@ class UserController {
       });
     }
 
+    const restaurantId = parseInt(req.params.id);
     const userId = req.userId;
     try {
-      const user = await UserService.updateUser(userId, req.body);
+      const restaurant = await RestaurantService.updateRestaurant(
+        restaurantId,
+        req.body,
+        userId
+      );
       res.status(200).send({
         success: true,
-        message: `User with ID ${userId} updated successfully`,
-        data: user,
+        message: `Restaurant with ID ${restaurantId} updated successfully`,
+        data: restaurant,
       });
     } catch (error) {
       res.status(500).send({
@@ -100,14 +111,15 @@ class UserController {
     }
   }
 
-  // Delete user
-  async deleteUser(req, res) {
+  // Delete restaurant
+  async deleteRestaurant(req, res) {
+    const restaurantId = parseInt(req.params.id);
     const userId = req.userId;
     try {
-      await UserService.deleteUser(userId);
+      await RestaurantService.deleteRestaurant(restaurantId, userId);
       res.status(200).json({
         success: true,
-        message: `User with ID ${userId} deleted successfully`,
+        message: `Restaurant with ID ${restaurantId} deleted successfully`,
       });
     } catch (error) {
       res.status(500).json({
@@ -119,4 +131,4 @@ class UserController {
   }
 }
 
-module.exports = new UserController();
+module.exports = new RestaurantController();

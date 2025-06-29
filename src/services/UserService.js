@@ -8,8 +8,8 @@ class UserService {
     const hashedPassword = await this.hashPassword(password);
     const user = await prisma.user.create({
       data: {
-        name,
-        username,
+        name: name,
+        username: username,
         password: hashedPassword,
         role: role,
       },
@@ -19,7 +19,7 @@ class UserService {
 
   // Find all users
   async findAllUsers() {
-    const user = await prisma.user.findMany({
+    const users = await prisma.user.findMany({
       select: {
         id: true,
         name: true,
@@ -27,7 +27,7 @@ class UserService {
         role: true,
       },
     });
-    return user;
+    return users;
   }
 
   // Find user by ID
@@ -46,13 +46,18 @@ class UserService {
 
   // Update user
   async updateUser(userId, data) {
+    let user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) throw new Error("User not found");
+
     const updatedData = {};
     if (data.name) updatedData.name = data.name;
     if (data.username) updatedData.username = data.username;
     if (data.password)
       updatedData.password = await this.hashPassword(data.password);
 
-    const user = await prisma.user.update({
+    user = await prisma.user.update({
       where: { id: userId },
       data: updatedData,
     });
@@ -61,6 +66,11 @@ class UserService {
 
   // Delete user
   async deleteUser(userId) {
+    let user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) throw new Error("User not found");
+
     await prisma.user.delete({
       where: { id: userId },
     });

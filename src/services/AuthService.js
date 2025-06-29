@@ -25,7 +25,7 @@ class AuthService {
     if (!user || !(await this.comparePassword(password, user.password))) {
       throw new Error("Invalid credentials");
     }
-    const token = this.generateToken(user.id);
+    const token = this.generateToken(user);
     return { user: this.excludePassword(user), token };
   }
 
@@ -37,9 +37,9 @@ class AuthService {
     return await bcrypt.compare(password, hashedPassword);
   }
 
-  generateToken(userId) {
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+  generateToken(user) {
+    return jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
     });
   }
 
