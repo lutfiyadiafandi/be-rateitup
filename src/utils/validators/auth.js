@@ -1,4 +1,3 @@
-// import express validator, prisma
 const { body } = require("express-validator");
 const prisma = require("../../../prisma/client");
 
