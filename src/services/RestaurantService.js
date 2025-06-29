@@ -37,6 +37,15 @@ class RestaurantService {
             username: true,
           },
         },
+        reviews: {
+          select: {
+            id: true,
+            title: true,
+            text: true,
+            rating: true,
+            user_id: true,
+          },
+        },
       },
       orderBy: {
         created_at: "desc",

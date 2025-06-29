@@ -53,7 +53,7 @@ class UserController {
     try {
       const user = await UserService.findUserById(userId);
       if (!user) {
-        return res.status(404).send({
+        return res.status(404).json({
           success: false,
           message: "User not found",
         });
@@ -76,7 +76,7 @@ class UserController {
   async updateUser(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).send({
+      return res.status(422).json({
         success: false,
         message: "Validation error",
         errors: errors.array(),
@@ -105,12 +105,12 @@ class UserController {
     const userId = req.userId;
     try {
       await UserService.deleteUser(userId);
-      res.status(200).json({
+      res.status(200).send({
         success: true,
         message: `User with ID ${userId} deleted successfully`,
       });
     } catch (error) {
-      res.status(500).json({
+      res.status(500).send({
         success: false,
         message: "Internal server error",
         error: error.message,

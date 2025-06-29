@@ -9,14 +9,14 @@ const {
 
 // User routes
 router.post(
-  "/users",
+  "/admin/users",
   verifyToken,
   authorizeRole("admin"),
   validateCreateUser,
   UserController.createUser
 );
 router.get(
-  "/users",
+  "/admin/users",
   verifyToken,
   authorizeRole("admin"),
   UserController.findUsers

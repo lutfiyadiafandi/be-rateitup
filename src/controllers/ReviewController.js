@@ -1,9 +1,9 @@
 const { validationResult } = require("express-validator");
-const RestaurantService = require("../services/RestaurantService");
+const ReviewService = require("../services/ReviewService");
 
-class RestaurantController {
-  //  Create restaurant
-  async createRestaurant(req, res) {
+class ReviewController {
+  // Create review
+  async createReview(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({
@@ -14,15 +14,17 @@ class RestaurantController {
     }
 
     const userId = req.userId;
+    const restaurantId = parseInt(req.params.restaurantId);
     try {
-      const restaurant = await RestaurantService.createRestaurant(
+      const review = await ReviewService.createReview(
         req.body,
+        restaurantId,
         userId
       );
       res.status(201).send({
         success: true,
-        message: "Restaurant created successfully",
-        data: restaurant,
+        message: "Review created successfully",
+        data: review,
       });
     } catch (error) {
       res.status(500).send({
@@ -33,14 +35,15 @@ class RestaurantController {
     }
   }
 
-  // Find all restaurants
-  async findRestaurants(req, res) {
+  // Find all reviews for a restaurant
+  async findReviews(req, res) {
+    const restaurantId = parseInt(req.params.restaurantId);
     try {
-      const restaurants = await RestaurantService.findAllRestaurants();
+      const reviews = await ReviewService.findAllReviews(restaurantId);
       res.status(200).send({
         success: true,
-        message: "Get all restaurants successfully",
-        data: restaurants,
+        message: `Get all reviews for restaurant ID: ${restaurantId} successfully`,
+        data: reviews,
       });
     } catch (error) {
       res.status(500).send({
@@ -51,23 +54,21 @@ class RestaurantController {
     }
   }
 
-  // Find restaurant by ID
-  async findRestaurantById(req, res) {
-    const restaurantId = parseInt(req.params.id);
+  // Find review by ID
+  async findReviewById(req, res) {
+    const reviewId = parseInt(req.params.id);
     try {
-      const restaurant = await RestaurantService.findRestaurantById(
-        restaurantId
-      );
-      if (!restaurant) {
+      const review = await ReviewService.findReviewById(reviewId);
+      if (!review) {
         return res.status(404).json({
           success: false,
-          message: "Restaurant not found",
+          message: "Review not found",
         });
       }
       res.status(200).send({
         success: true,
-        message: `Get restaurant by ID: ${restaurantId} successfully`,
-        data: restaurant,
+        message: `Get review by ID: ${reviewId} successfully`,
+        data: review,
       });
     } catch (error) {
       res.status(500).send({
@@ -78,8 +79,8 @@ class RestaurantController {
     }
   }
 
-  // Update restaurant
-  async updateRestaurant(req, res) {
+  // Update review
+  async updateReview(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({
@@ -89,18 +90,18 @@ class RestaurantController {
       });
     }
 
-    const restaurantId = parseInt(req.params.id);
+    const reviewId = parseInt(req.params.id);
     const userId = req.userId;
     try {
-      const restaurant = await RestaurantService.updateRestaurant(
-        restaurantId,
+      const review = await ReviewService.updateReview(
+        reviewId,
         req.body,
         userId
       );
       res.status(200).send({
         success: true,
-        message: `Restaurant with ID ${restaurantId} updated successfully`,
-        data: restaurant,
+        message: `Review with ID ${reviewId} updated successfully`,
+        data: review,
       });
     } catch (error) {
       res.status(500).send({
@@ -111,15 +112,15 @@ class RestaurantController {
     }
   }
 
-  // Delete restaurant
-  async deleteRestaurant(req, res) {
-    const restaurantId = parseInt(req.params.id);
+  // Delete review
+  async deleteReview(req, res) {
+    const reviewId = parseInt(req.params.id);
     const userId = req.userId;
     try {
-      await RestaurantService.deleteRestaurant(restaurantId, userId);
+      await ReviewService.deleteReview(reviewId, userId);
       res.status(200).send({
         success: true,
-        message: `Restaurant with ID ${restaurantId} deleted successfully`,
+        message: `Review with ID ${reviewId} deleted successfully`,
       });
     } catch (error) {
       res.status(500).send({
@@ -131,4 +132,4 @@ class RestaurantController {
   }
 }
 
-module.exports = new RestaurantController();
+module.exports = new ReviewController();
