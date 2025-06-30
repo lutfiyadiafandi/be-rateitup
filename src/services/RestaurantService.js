@@ -43,12 +43,22 @@ class RestaurantService {
             title: true,
             text: true,
             rating: true,
-            user_id: true,
+            created_at: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+              },
+            },
+          },
+          orderBy: {
+            created_at: "asc",
           },
         },
       },
       orderBy: {
-        created_at: "desc",
+        created_at: "asc",
       },
     });
     return restaurants;
@@ -64,6 +74,25 @@ class RestaurantService {
             id: true,
             name: true,
             username: true,
+          },
+        },
+        reviews: {
+          select: {
+            id: true,
+            title: true,
+            text: true,
+            rating: true,
+            created_at: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+              },
+            },
+          },
+          orderBy: {
+            created_at: "asc",
           },
         },
       },

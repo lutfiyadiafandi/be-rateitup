@@ -37,6 +37,23 @@ class ReviewService {
             username: true,
           },
         },
+        comments: {
+          select: {
+            id: true,
+            text: true,
+            created_at: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+              },
+            },
+          },
+          orderBy: {
+            created_at: "asc",
+          },
+        },
       },
       orderBy: {
         created_at: "asc",
@@ -55,6 +72,23 @@ class ReviewService {
             id: true,
             name: true,
             username: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+            text: true,
+            created_at: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+              },
+            },
+          },
+          orderBy: {
+            created_at: "asc",
           },
         },
       },
