@@ -41,7 +41,7 @@ model Restaurant {
   user_id      Int
 
   user         User       @relation(fields: [user_id], references: [id])
-  reviews      Review[]
+  reviews      Review[]   
 
   @@map("restaurants")
 }
@@ -57,7 +57,7 @@ model Review {
   restaurant_id   Int
 
   user            User        @relation(fields: [user_id], references: [id])
-  restaurant      Restaurant  @relation(fields: [restaurant_id], references: [id])
+  restaurant      Restaurant  @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
   comments        Comment[]
 
   @@map("reviews")
@@ -72,7 +72,7 @@ model Comment {
   review_id   Int
 
   user        User       @relation(fields: [user_id], references: [id])
-  review      Review     @relation(fields: [review_id], references: [id])
+  review      Review     @relation(fields: [review_id], references: [id], onDelete: Cascade)
 
   @@map("comments")
 }

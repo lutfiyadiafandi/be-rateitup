@@ -30,7 +30,6 @@ class UserService {
     return users;
   }
 
-  // Find user by ID
   async findUserById(userId) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -39,6 +38,45 @@ class UserService {
         name: true,
         username: true,
         role: true,
+        restaurants: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            photo_url: true,
+            location: true,
+            maps_url: true,
+            created_at: true,
+          },
+          orderBy: {
+            created_at: "desc",
+          },
+        },
+        reviews: {
+          select: {
+            id: true,
+            title: true,
+            text: true,
+            rating: true,
+            created_at: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+              },
+            },
+            restaurant: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          orderBy: {
+            created_at: "desc",
+          },
+        },
       },
     });
     return user;

@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const UserService = require("../services/UserService");
+const camelcaseKeys = require("camelcase-keys");
 
 class UserController {
   //  Create user
@@ -36,7 +37,7 @@ class UserController {
       res.status(200).send({
         success: true,
         message: "Get all users successfully",
-        data: users,
+        data: camelcaseKeys(users, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -61,7 +62,7 @@ class UserController {
       res.status(200).send({
         success: true,
         message: `Get user by ID: ${userId} successfully`,
-        data: user,
+        data: camelcaseKeys(user, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({

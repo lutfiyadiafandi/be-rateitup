@@ -58,7 +58,7 @@ class RestaurantService {
         },
       },
       orderBy: {
-        created_at: "asc",
+        created_at: "desc",
       },
     });
     return restaurants;
