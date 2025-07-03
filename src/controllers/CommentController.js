@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const CommentService = require("../services/CommentService");
+const camelcaseKeys = require("camelcase-keys");
 
 class CommentController {
   // Create comment
@@ -24,7 +25,7 @@ class CommentController {
       res.status(201).send({
         success: true,
         message: "Comment created successfully",
-        data: comment,
+        data: camelcaseKeys(comment, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -43,7 +44,7 @@ class CommentController {
       res.status(200).send({
         success: true,
         message: `Get all comments for review ID: ${reviewId} successfully`,
-        data: comments,
+        data: camelcaseKeys(comments, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -68,7 +69,7 @@ class CommentController {
       res.status(200).send({
         success: true,
         message: `Get comment by ID: ${commentId} successfully`,
-        data: comment,
+        data: camelcaseKeys(comment, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -83,11 +84,10 @@ class CommentController {
   async deleteComment(req, res) {
     const commentId = parseInt(req.params.id);
     try {
-      const comment = await CommentService.deleteComment(commentId);
+      await CommentService.deleteComment(commentId);
       res.status(200).send({
         success: true,
         message: `Comment with ID: ${commentId} deleted successfully`,
-        data: comment,
       });
     } catch (error) {
       res.status(500).send({

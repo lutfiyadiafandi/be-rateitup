@@ -68,7 +68,14 @@ class RestaurantService {
   async findRestaurantById(restaurantId) {
     const restaurant = await prisma.restaurant.findUnique({
       where: { id: restaurantId },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        photo_url: true,
+        location: true,
+        maps_url: true,
+        created_at: true,
         user: {
           select: {
             id: true,
@@ -88,6 +95,23 @@ class RestaurantService {
                 id: true,
                 name: true,
                 username: true,
+              },
+            },
+            comments: {
+              select: {
+                id: true,
+                text: true,
+                created_at: true,
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                  },
+                },
+              },
+              orderBy: {
+                created_at: "asc",
               },
             },
           },

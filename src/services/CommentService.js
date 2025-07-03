@@ -70,7 +70,7 @@ class CommentService {
     await prisma.comment.delete({
       where: { id: commentId },
     });
-    return comment;
+    return true;
   }
 }
 

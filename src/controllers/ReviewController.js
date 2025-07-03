@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const ReviewService = require("../services/ReviewService");
+const camelcaseKeys = require("camelcase-keys");
 
 class ReviewController {
   // Create review
@@ -24,7 +25,7 @@ class ReviewController {
       res.status(201).send({
         success: true,
         message: "Review created successfully",
-        data: review,
+        data: camelcaseKeys(review, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -43,7 +44,7 @@ class ReviewController {
       res.status(200).send({
         success: true,
         message: `Get all reviews for restaurant ID: ${restaurantId} successfully`,
-        data: reviews,
+        data: camelcaseKeys(reviews, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -68,7 +69,7 @@ class ReviewController {
       res.status(200).send({
         success: true,
         message: `Get review by ID: ${reviewId} successfully`,
-        data: review,
+        data: camelcaseKeys(review, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -101,7 +102,7 @@ class ReviewController {
       res.status(200).send({
         success: true,
         message: `Review with ID ${reviewId} updated successfully`,
-        data: review,
+        data: camelcaseKeys(review, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({

@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const RestaurantService = require("../services/RestaurantService");
+const camelcaseKeys = require("camelcase-keys");
 
 class RestaurantController {
   //  Create restaurant
@@ -22,7 +23,7 @@ class RestaurantController {
       res.status(201).send({
         success: true,
         message: "Restaurant created successfully",
-        data: restaurant,
+        data: camelcaseKeys(restaurant, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -40,7 +41,7 @@ class RestaurantController {
       res.status(200).send({
         success: true,
         message: "Get all restaurants successfully",
-        data: restaurants,
+        data: camelcaseKeys(restaurants, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -67,7 +68,7 @@ class RestaurantController {
       res.status(200).send({
         success: true,
         message: `Get restaurant by ID: ${restaurantId} successfully`,
-        data: restaurant,
+        data: camelcaseKeys(restaurant, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
@@ -100,7 +101,7 @@ class RestaurantController {
       res.status(200).send({
         success: true,
         message: `Restaurant with ID ${restaurantId} updated successfully`,
-        data: restaurant,
+        data: camelcaseKeys(restaurant, { deep: true }),
       });
     } catch (error) {
       res.status(500).send({
