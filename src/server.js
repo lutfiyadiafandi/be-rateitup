@@ -36,6 +36,8 @@ process.on("unhandledRejection", (reason, promise) => {
   // Penting: Keluar dari proses setelah error
   process.exit(1);
 });
+
+console.log("Global error handlers have been registered."); // <<< TAMBAHKAN INI
 // --- AKHIR KODE YANG DITAMBAHKAN ---
 
 const PORT = process.env.PORT; // Pastikan PORT ini ada di environment variables Railway
