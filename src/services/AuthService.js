@@ -6,12 +6,13 @@ class AuthService {
   // Register user
   async register(name, username, password) {
     const hashedPassword = await this.hashPassword(password);
+    const userCount = await prisma.user.count();
     const user = await prisma.user.create({
       data: {
         name: name,
         username: username,
         password: hashedPassword,
-        role: "user", // default role
+        role: userCount === 0 ? "admin" : "user",
       },
     });
     return this.excludePassword(user);
